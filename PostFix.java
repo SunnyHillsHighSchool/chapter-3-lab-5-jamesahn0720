@@ -14,64 +14,51 @@ public class PostFix
 
  public PostFix()
  {
+   expression = "";
    stack = new Stack<Double>();
  }
 
  public PostFix(String exp)
  {
-  stack = new Stack<Double>();
-       setExpression(exp);
+expression = exp;
+   stack = new Stack<Double>();
  }
 
  public void setExpression(String exp)
  {
-  this.expression = exp;
+expression = exp;
+   stack = new Stack<Double>();
  }
 
  public double calc(double one, double two, char op)
  {
-  double result = 0.0;
-       switch(op) 
-                { 
-                    case '+': 
-                    result = one + two; 
-                    break; 
-                      
-                    case '-': 
-                    result = two - one; 
-                    break; 
-                      
-                    case '/': 
-                    result = two/one; 
-                    break; 
-                      
-                    case '*': 
-                    result = one * two; 
-                    break; 
-              } 
-        return result;
+  switch (op) {
+  case '+': return two + one;
+  case '-': return two - one;
+  case '*': return two * one;
+  case '/': return two / one;
+}
+  return 0.0;
  }
 
  public void solve()
  {
-   String value[] = this.expression.split(" ");
-       for(int i = 0; i < value.length; i++) {
-           if(value[i].equals("+") || value[i].equals("-") ||value[i].equals("*") || value[i].equals("/")) {
-               double result = calc(stack.pop(), stack.pop(), value[i].charAt(0));
-               stack.push(result);
-           }
-           else {
-               stack.push(Double.parseDouble(value[i]));
-           }
-       }
+   for(int i = 0; i < expression.length(); i+=2)
+   {
+     if(Character.isDigit(expression.charAt(i)))
+     {
+       stack.push((double)Character.getNumericValue(expression.charAt(i)));
+     }else{
+       double one = stack.pop();
+       double two = stack.pop();
+       stack.push(calc(one,two,expression.charAt(i)));
+     }
+   }
  }
 
   public String toString() {
-       if(!stack.empty()) {
-           return(this.expression + " = " + Double.toString(stack.pop()));
-       }
-       else {
-           return null;
-       }
+       String s = expression+" = ";
+   s+=stack.pop();
+   return s;
    }
 }
